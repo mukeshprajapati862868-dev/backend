@@ -2,33 +2,38 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const cors = require("cors"); // ✅ CORS middleware for Cross-Origin requests
-const path = require("path");
+const cors = require("cors"); // ✅ CORS middleware for cross-origin requests
 
-// 🔧 Load environment variables from .env file
-dotenv.config();
+dotenv.config(); // 🔧 Load environment variables
 
-// 🔗 Connect to MongoDB
-connectDB();
+connectDB(); // 🔗 Connect to MongoDB
 
 const app = express();
 
-// ✅ Enable CORS for frontend origin (e.g., Vite: http://localhost:5173)
+// ✅ CORS Setup for Localhost and Vercel Frontend
 app.use(cors({
-  origin: "http://localhost:5173", // 🔁 Change this to your frontend production URL on deploy
-  methods: ["GET", "POST", "PUT", "DELETE"], // ✅ Allowed HTTP methods
-  credentials: true // ✅ Allow sending cookies, authorization headers, etc.
+  origin: [
+    "http://localhost:5173", // Local development
+    "https://frontend-tsa9.vercel.app" // 🔁 Your Vercel frontend URL
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
 
-// ✅ Parse incoming JSON requests
-app.use(express.json());
+app.use(express.json()); // ✅ Parse JSON request bodies
 
-// 🛣️ Setup Routes
-const bookRoutes = require("./routes/bookRoute"); // 📚 Book-related APIs
-const authRoutes = require("./routes/authRoutes"); // 🔐 Auth-related APIs
+// 🛣️ Import Routes
+const bookRoutes = require("./routes/bookRoute");
+const authRoutes = require("./routes/authRoutes");
 
+// 🛣️ Use Routes
 app.use("/api/books", bookRoutes);
 app.use("/api/auth", authRoutes);
+
+// 🟢 Root route to verify deployment
+app.get("/", (req, res) => {
+  res.send("✅ Backend is running");
+});
 
 // 🚀 Start the server
 const PORT = process.env.PORT || 4000;
