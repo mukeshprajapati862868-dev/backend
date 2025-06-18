@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# System files
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Optional: VS Code settings
+.vscode/
+
+# Optional: Build output (if using TypeScript or bundler)
+dist/
+build/
