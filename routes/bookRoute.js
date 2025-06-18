@@ -8,17 +8,17 @@ const {
   deleteBook,
 } = require("../controller/bookController");
 
-// ✅ Corrected: Import from bookModel.js
+// ✅ Import Book model for custom routes
 const Book = require("../models/bookModel");
 
-// Existing routes (do not change)
-router.get("/", getAllBooks);           // GET /api/books
-router.get("/:id", getBookById);        // GET /api/books/:id
-router.post("/", createBook);           // POST /api/books
-router.put("/:id", updateBook);         // PUT /api/books/:id
-router.delete("/:id", deleteBook);      // DELETE /api/books/:id
+// 📚 Main Book CRUD Routes
+router.get("/", getAllBooks);            // GET /api/books
+router.get("/:id", getBookById);         // GET /api/books/:id
+router.post("/", createBook);            // POST /api/books
+router.put("/:id", updateBook);          // PUT /api/books/:id
+router.delete("/:id", deleteBook);       // DELETE /api/books/:id
 
-// ✅ Add Review Route
+// 🌟 Add Review to a Book
 router.post("/:id/reviews", async (req, res) => {
   const { id } = req.params;
   const { reviewer, comment, rating } = req.body;
@@ -30,10 +30,10 @@ router.post("/:id/reviews", async (req, res) => {
     book.reviews.push({ reviewer, comment, rating });
     await book.save();
 
-    res.status(200).json({ message: "Review added successfully", book });
+    res.status(200).json({ message: "Review added", book });
   } catch (err) {
-    console.error("Error adding review:", err);
-    res.status(500).json({ message: "Failed to add review" });
+    console.error("Review error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
