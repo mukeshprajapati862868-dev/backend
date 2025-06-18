@@ -2,39 +2,33 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const cors = require("cors"); // ✅ CORS middleware for cross-origin requests
+const cors = require("cors");
 
-dotenv.config(); // 🔧 Load environment variables
-
-connectDB(); // 🔗 Connect to MongoDB
+dotenv.config();
+connectDB();
 
 const app = express();
 
-// ✅ CORS Setup for Localhost and Vercel Frontend
 app.use(cors({
   origin: [
-    "http://localhost:5173", // Local development
-    "https://frontend-tsa9.vercel.app" // 🔁 Your Vercel frontend URL
+    "http://localhost:5173",
+    "https://frontend-tsa9.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-app.use(express.json()); // ✅ Parse JSON request bodies
+app.use(express.json());
 
-// 🛣️ Import Routes
 const bookRoutes = require("./routes/bookRoute");
 const authRoutes = require("./routes/authRoutes");
 
-// 🛣️ Use Routes
 app.use("/api/books", bookRoutes);
 app.use("/api/auth", authRoutes);
 
-// 🟢 Root route to verify deployment
 app.get("/", (req, res) => {
   res.send("✅ Backend is running");
 });
 
-// 🚀 Start the server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
